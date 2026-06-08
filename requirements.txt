@@ -1,0 +1,5 @@
+# No external dependencies required for Week 1
+
+# Uses Python standard libraries:
+
+# json
