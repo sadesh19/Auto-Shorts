@@ -1,0 +1,25 @@
+# Python virtual environment
+.venv/
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Audio / video test files (large binaries)
+*.wav
+*.mp4
+*.mp3
+*.avi
+*.mov
+
+# Generated transcript and output files
+*_transcript.json
+*_clips.json
+output.json
+
+# OS files
+.DS_Store
+Thumbs.db
