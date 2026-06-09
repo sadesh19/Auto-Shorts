@@ -4,13 +4,14 @@
 *.pyc
 *.pyo
 *.pyd
+__pycache__/
 
 # Virtual Environment
 
 venv/
 env/
 .venv/
-
+.env
 # IDE Files
 
 .idea/
@@ -24,3 +25,6 @@ Thumbs.db
 # Logs
 
 *.log
+
+uploads/
+shorts_output/
