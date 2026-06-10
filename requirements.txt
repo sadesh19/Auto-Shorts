@@ -1,5 +1,9 @@
-# No external dependencies required for Week 1
+# AutoShorts AI — dependencies
+# Install with: pip install -r requirements.txt
 
-# Uses Python standard libraries:
-
-# json
+flask==3.0.0
+moviepy==2.2.1
+opencv-python==4.9.0.80
+pillow==10.3.0
+numpy
+werkzeug
