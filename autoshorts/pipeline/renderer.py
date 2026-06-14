@@ -2,11 +2,11 @@ from moviepy import VideoFileClip
 
 try:
     # When run from repo root (e.g. test_renderer.py): autoshorts is a package
-    from autoshorts.pipeline.effects import apply_zoom_effect
+    from autoshorts.pipeline.effects import apply_zoom_effect, add_watermark
     from autoshorts.pipeline.captions import add_caption, add_word_captions
 except ModuleNotFoundError:
     # When run from inside autoshorts/ (e.g. Flask app.py)
-    from pipeline.effects import apply_zoom_effect
+    from pipeline.effects import apply_zoom_effect, add_watermark
     from pipeline.captions import add_caption, add_word_captions
 
 
@@ -61,6 +61,8 @@ def render_short(
     end_time,
     output_path,
     word_timestamps=None,
+    logo_path=None,
+    logo_opacity=0.8,
 ):
     """
     Full render pipeline for one short clip.
@@ -75,6 +77,9 @@ def render_short(
         Each dict: {"word": str, "start": float, "end": float}
         Times are relative to the START of the clip (i.e., start_time = t=0).
         If None or empty, a static caption is used instead.
+    logo_path    : str, optional – absolute path to a PNG watermark logo.
+                   If None, watermark stage is skipped.
+    logo_opacity : float – watermark opacity 0.0–1.0, default 0.8
 
     Pipeline stages (in order)
     --------------------------
@@ -82,7 +87,8 @@ def render_short(
     2. Crop       – centre-crop to 9:16 vertical format  ← Task 1
     3. Zoom       – punch-in zoom effect                  ← Task 2
     4. Captions   – word-by-word highlight captions       ← Task 2
-    5. Export     – write MP4 with libx264 + aac
+    5. Watermark  – logo overlay with opacity control     ← Task 3 (stretch)
+    6. Export     – write MP4 with libx264 + aac
     """
 
     # ── 1. Cut ──────────────────────────────────────────────────────────────
@@ -100,7 +106,11 @@ def render_short(
     else:
         clip = add_caption(clip, "AutoShorts")
 
-    # ── 5. Export ───────────────────────────────────────────────────────────
+    # ── 5. Watermark ─────────────────────────────────────────────────────────
+    if logo_path:
+        clip = add_watermark(clip, logo_path, opacity=logo_opacity)
+
+    # ── 6. Export ───────────────────────────────────────────────────────────
     clip.write_videofile(
         output_path,
         codec="libx264",

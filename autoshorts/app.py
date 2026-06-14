@@ -55,24 +55,30 @@ def upload():
 
     # Optional clip timing from form
     try:
-        start_time = float(request.form.get("start_time", 0))
-        end_time = float(request.form.get("end_time", 30))
+        start_time   = float(request.form.get("start_time", 0))
+        end_time     = float(request.form.get("end_time", 30))
+        logo_opacity = float(request.form.get("logo_opacity", 0.8))
+        logo_opacity = max(0.0, min(1.0, logo_opacity))   # clamp 0–1
     except ValueError:
-        start_time, end_time = 0, 30
+        start_time, end_time, logo_opacity = 0, 30, 0.8
 
     output_filename = "output.mp4"
     output_path = os.path.join(OUTPUT_FOLDER, output_filename)
 
-    # Run the pipeline
-    # word_timestamps=None → falls back to static caption
-    # (a transcription module from another team member can pass word_timestamps
-    #  by calling render_short() directly)
+    # Logo path — fixed to the bundled logo in static/logo/logo.png
+    # opacity is user-controlled via the UI slider (0–100 mapped to 0.0–1.0)
+    logo_path = os.path.join(os.path.dirname(__file__), "static", "logo", "logo.png")
+    if not os.path.exists(logo_path):
+        logo_path = None   # skip watermark if logo file is missing
+
     render_short(
         video_path=upload_path,
         start_time=start_time,
         end_time=end_time,
         output_path=output_path,
         word_timestamps=None,
+        logo_path=logo_path,
+        logo_opacity=logo_opacity,
     )
 
     return jsonify({

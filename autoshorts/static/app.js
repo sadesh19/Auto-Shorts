@@ -22,9 +22,16 @@ const errorSec     = document.getElementById("error-section");
 const errorMsg     = document.getElementById("error-msg");
 const startInput   = document.getElementById("start-time");
 const endInput     = document.getElementById("end-time");
+const opacitySlider = document.getElementById("logo-opacity");
+const opacityValue  = document.getElementById("opacity-value");
 
 let selectedFile = null;
 let fakeTimer    = null;   // used to animate progress bar
+
+// ── Opacity slider live label ────────────────────────────────────────────────
+opacitySlider.addEventListener("input", () => {
+  opacityValue.textContent = opacitySlider.value;
+});
 
 // ── File selection ──────────────────────────────────────────────────────────
 
@@ -70,6 +77,7 @@ generateBtn.addEventListener("click", async () => {
   formData.append("video", selectedFile);
   formData.append("start_time", startInput.value || "0");
   formData.append("end_time",   endInput.value   || "30");
+  formData.append("logo_opacity", (parseInt(opacitySlider.value) / 100).toFixed(2));
 
   try {
     const response = await fetch("/upload", {
