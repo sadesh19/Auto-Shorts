@@ -1,77 +1,56 @@
-# Week 1 - Clip Selection Module
+# AutoShorts AI
 
-## Project Overview
+Local web app that converts a video into a 9:16 vertical short with zoom, captions, and a logo watermark. Runs fully on CPU, no API keys needed.
 
-This project implements a basic clip selection system that processes transcript data and identifies the most relevant video clips based on scoring and ranking logic.
+---
 
-## Objective
+## Tasks
 
-Input: Transcript JSON
+**Task 1 — Basic Renderer**
+Cuts the video to the chosen time range, centre-crops to 9:16, exports as MP4.
 
-Process:
+**Task 2 — Zoom Effect**
+Punch-in zoom from 1.0× → 1.15× over 1.5 s at clip start, holds after. Per-frame via OpenCV.
 
-* Read transcript segments
-* Score segments using keyword-based relevance
-* Rank segments by score
-* Remove overlapping clips
-* Select top clips
+**Task 2 — Captions**
+Static "AutoShorts" label in the lower third. Font scales with clip width so it never overflows. Ready to accept word-level timestamps from the transcription module.
 
-Output:
+**Flask UI**
+Drag-and-drop upload, start/end time inputs, logo opacity slider, Generate button, animated progress bar, Download button on completion. Dark theme (`#0a0a0f` / `#7C3AED`).
 
-* List of clip timestamps in (start, end) format
+**Task 3 — Logo Watermark (Stretch)**
+Composites `logo.png` over the top-right corner of every rendered short. Opacity is controlled by the UI slider (0–100%). Logo is auto-scaled to 18% of clip width and preserves PNG transparency.
 
-## Project Structure
+---
 
-Week1_ClipSelection/
+## Run
 
-├── transcript.json
+```bash
+pip install -r requirements.txt
+cd autoshorts
+python app.py
+```
 
-├── clip_selector.py
+Open `http://127.0.0.1:5000`
 
-├── output.json
+---
 
-├── requirements.txt
+## Files
 
-├── .gitignore
-
-└── README.md
-
-## Features
-
-* Transcript JSON parsing
-* Keyword-based clip scoring
-* Clip ranking
-* Non-overlapping clip selection
-* JSON output generation
-
-## How to Run
-
-1. Install Python 3.x
-2. Place transcript data in transcript.json
-3. Run:
-
-python clip_selector.py
-
-4. Generated clips will be saved in output.json
-
-## Sample Output
-
-[
-{
-"start": 20,
-"end": 50
-},
-{
-"start": 50,
-"end": 80
-}
-]
-
-## Week 1 Deliverables
-
-* Transcript processing
-* Scoring logic
-* Ranking system
-* Non-overlapping clip filtering
-* Output generation
-* Project documentation
+```
+autoshorts/
+├── app.py                  # Flask routes — upload, render, download
+├── pipeline/
+│   ├── renderer.py         # Cut → 9:16 crop → zoom → captions → watermark → export
+│   ├── effects.py          # Zoom (OpenCV) + logo watermark (Pillow)
+│   └── captions.py         # Caption overlay (moviepy TextClip)
+├── static/
+│   ├── style.css
+│   ├── app.js
+│   └── logo/
+│       └── logo.png        # Watermark logo
+├── templates/
+│   └── index.html
+├── uploads/
+└── shorts_output/
+```

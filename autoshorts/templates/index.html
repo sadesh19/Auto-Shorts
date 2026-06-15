@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AutoShorts AI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+
+  <!-- ── Header ───────────────────────────────────────────────── -->
+  <header>
+    <h1>Auto<span>Shorts</span> AI</h1>
+    <p>Turn any video into a 9:16 short with captions &amp; zoom effects — 100% local</p>
+  </header>
+
+  <!-- ── Main card ─────────────────────────────────────────────── -->
+  <main class="card">
+
+    <!-- Drop zone -->
+    <div id="drop-zone">
+      <div class="icon">🎬</div>
+      <p><strong>Click to browse</strong> or drag &amp; drop your video here</p>
+      <p>MP4 · MOV · AVI · MKV · WEBM</p>
+      <!-- Hidden native file input covers the whole drop zone -->
+      <input type="file" id="file-input" accept="video/*" />
+    </div>
+
+    <!-- File info line (populated by JS) -->
+    <div id="file-info"></div>
+
+    <!-- Settings: clip start/end -->
+    <div class="settings">
+      <div class="field">
+        <label for="start-time">Start time (seconds)</label>
+        <input type="number" id="start-time" value="0" min="0" step="1" />
+      </div>
+      <div class="field">
+        <label for="end-time">End time (seconds)</label>
+        <input type="number" id="end-time" value="30" min="1" step="1" />
+      </div>
+    </div>
+
+    <!-- Logo watermark opacity -->
+    <div class="field logo-field">
+      <label for="logo-opacity">Logo watermark opacity — <span id="opacity-value">80</span>%</label>
+      <input type="range" id="logo-opacity" min="0" max="100" value="80" step="5" />
+    </div>
+
+    <!-- Generate button -->
+    <button id="generate-btn">Generate Short</button>
+
+    <!-- ── Progress ─────────────────────────────────────────────── -->
+    <div id="progress-section">
+      <div class="progress-label">
+        <span>Processing…</span>
+      </div>
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" id="progress-fill"></div>
+      </div>
+      <div id="status-text"></div>
+    </div>
+
+    <!-- ── Success + Download ────────────────────────────────────── -->
+    <div id="result-section">
+      <p>✅ Your short is ready!</p>
+      <a id="download-btn" href="#" download>⬇ Download Short</a>
+    </div>
+
+    <!-- ── Error ─────────────────────────────────────────────────── -->
+    <div id="error-section">
+      <span id="error-msg"></span>
+    </div>
+
+  </main>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
